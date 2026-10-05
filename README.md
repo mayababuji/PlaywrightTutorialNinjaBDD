@@ -1,6 +1,8 @@
 # Tutorial Ninja Playwright BDD
+[![Playwright BDD Tests](https://github.com/mayababuji/PlaywrightTutorialNinjaBDD/actions/workflows/playwright.yml/badge.svg?branch=main)](https://github.com/mayababuji/PlaywrightTutorialNinjaBDD/actions/workflows/playwright.yml)
 
 UI test automation framework for the Tutorial Ninja demo store using Playwright, playwright-bdd, Page Objects, Allure reporting, and Jenkins.
+
 
 ## Prerequisites
 
@@ -124,3 +126,16 @@ Add your Jenkins Allure report screenshot here:
 Add your Playwright report screenshot here:
 
 ![Playwright HTML Report](screenshots/playwright-html-report.png)
+
+## GitHub Actions
+
+GitHub Actions automatically runs the Playwright BDD test suite on pushes and pull requests to `main`.
+
+The workflow:
+- Installs Node.js dependencies and Playwright Chromium.
+- Generates BDD tests with `bddgen`.
+- Runs Playwright tests headlessly.
+- Generates and uploads Allure and Playwright report artifacts.
+- Uses the `TEST_PASSWORD` GitHub repository secret.
+
+View workflow runs and download reports from the repository **Actions** tab.
