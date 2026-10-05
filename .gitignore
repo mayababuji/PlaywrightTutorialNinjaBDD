@@ -1,0 +1,18 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Generated Playwright-BDD files
+.features-gen/
+
+# Dependencies
+node_modules/
+
+# Playwright output
+playwright-report/
+test-results/
+
+# Allure output
+allure-results/
+allure-report/
