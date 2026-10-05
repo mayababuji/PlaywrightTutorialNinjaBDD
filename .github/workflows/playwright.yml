@@ -1,0 +1,84 @@
+name: Playwright BDD Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Playwright BDD Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      TEST_ENV: dev
+      BASE_URL: https://tutorialsninja.com/demo/
+      HEADLESS: true
+      TEST_TIMEOUT: 30000
+      CI: true
+      TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run BDD tests
+        run: |
+          npx bddgen
+          npx playwright test
+
+      - name: Add Allure categories
+        if: always()
+        run: |
+          if [ -d allure-results ]; then
+            cp test-data/categories.json allure-results/categories.json
+          fi
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Generate Allure report
+        if: always()
+        run: |
+          npx allure generate allure-results --clean -o allure-report
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: warn
