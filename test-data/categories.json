@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Tutorial Ninja - Checkout and Order Defects",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*(checkout|order|payment|shipping|register|confirmation).*"
+  },
+  {
+    "name": "Tutorial Ninja - Cart, Coupon, or Gift Certificate Defects",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*(cart|coupon|voucher|gift certificate|quantity|Eco Tax|VAT).*"
+  },
+  {
+    "name": "Tutorial Ninja - Product and Currency Defects",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*(iPhone|HP LP3065|Canon EOS 5D|Euro|Select required).*"
+  },
+  {
+    "name": "Automation - Locator Problem",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": ".*(locator|strict mode violation|waiting for|element is not attached).*"
+  },
+  {
+    "name": "Automation - Timeout Problem",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": ".*(Timeout|timeout|timed out).*"
+  },
+  {
+    "name": "Environment - Network or Browser Problem",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": ".*(net::ERR|ECONNREFUSED|ENOTFOUND|Target page.*closed|browser).*"
+  },
+  {
+    "name": "Other Product Failures",
+    "matchedStatuses": ["failed"]
+  },
+  {
+    "name": "Other Framework Failures",
+    "matchedStatuses": ["broken"]
+  }
+]

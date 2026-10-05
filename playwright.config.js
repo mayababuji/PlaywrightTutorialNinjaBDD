@@ -27,9 +27,23 @@ export default defineConfig({
     trace: 'retain-on-failure'
   },
 
- reporter: [
+reporter: [
   ['line'],
   ['html', { open: 'never' }],
-  ['allure-playwright', { resultsDir: 'allure-results' }]
+  [
+    'allure-playwright',
+    {
+      resultsDir: 'allure-results',
+
+      environmentInfo: {
+        environment: process.env.TEST_ENV || 'dev',
+        base_url: process.env.BASE_URL || 'Not set',
+        browser: 'Chromium',
+        headless: process.env.HEADLESS || 'false',
+        node_version: process.version,
+        operating_system: process.platform
+      }
+    }
+  ]
 ]
 });

@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools {
+    nodejs 'NodeJS-20'
+  }
+
   environment {
     TEST_ENV = 'dev'
     BASE_URL = 'https://tutorialsninja.com/demo/'
@@ -8,15 +12,16 @@ pipeline {
     TEST_TIMEOUT = '30000'
     CI = 'true'
   }
-  tools {
-  nodejs 'NodeJS-20'
-}
 
   stages {
     stage('Install dependencies') {
       steps {
-        sh 'npm ci'
-        sh 'npx playwright install --with-deps chromium'
+        sh '''
+          node --version
+          npm --version
+          npm ci
+          npx playwright install chromium
+        '''
       }
     }
 
@@ -35,11 +40,35 @@ pipeline {
         }
       }
     }
+
+    stage('Add Allure categories') {
+      steps {
+        sh '''
+          if [ -d allure-results ]; then
+            cp test-data/categories.json allure-results/categories.json
+            echo "Allure categories copied."
+          else
+            echo "Skipping category copy: allure-results does not exist."
+          fi
+        '''
+      }
+    }
   }
 
   post {
     always {
-      allure results: [[path: 'allure-results']]
+      script {
+        if (fileExists('allure-results')) {
+          allure(
+            includeProperties: false,
+            jdk: '',
+            results: [[path: 'allure-results']],
+            reportBuildPolicy: 'ALWAYS'
+          )
+        } else {
+          echo 'Skipping Allure report: no allure-results directory was created.'
+        }
+      }
 
       archiveArtifacts(
         artifacts: 'playwright-report/**,test-results/**',
