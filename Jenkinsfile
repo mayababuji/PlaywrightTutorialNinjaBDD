@@ -2,13 +2,22 @@ pipeline {
   agent any
 
   environment {
+    TEST_ENV = 'dev'
     BASE_URL = 'https://tutorialsninja.com/demo/'
     HEADLESS = 'true'
     TEST_TIMEOUT = '30000'
+    CI = 'true'
   }
 
   stages {
-    stage('Run tests') {
+    stage('Install dependencies') {
+      steps {
+        sh 'npm ci'
+        sh 'npx playwright install --with-deps chromium'
+      }
+    }
+
+    stage('Run BDD tests') {
       steps {
         withCredentials([
           string(
@@ -17,8 +26,8 @@ pipeline {
           )
         ]) {
           sh '''
-            TEST_ENV=dev npx bddgen
-            TEST_ENV=dev npx playwright test
+            npx bddgen
+            npx playwright test
           '''
         }
       }
@@ -28,6 +37,11 @@ pipeline {
   post {
     always {
       allure results: [[path: 'allure-results']]
+
+      archiveArtifacts(
+        artifacts: 'playwright-report/**,test-results/**',
+        allowEmptyArchive: true
+      )
     }
   }
 }
