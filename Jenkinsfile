@@ -8,6 +8,9 @@ pipeline {
     TEST_TIMEOUT = '30000'
     CI = 'true'
   }
+  tools {
+  nodejs 'NodeJS-20'
+}
 
   stages {
     stage('Install dependencies') {
