@@ -204,7 +204,7 @@ When(
 );
 
 When(
-  'the customer proceeds to checkout with new registred account',
+  'the customer proceeds to checkout with a new registered account',
   async ({ checkoutPage }) => {
     await checkoutPage.clickOnCheckoutmainPage();
   }
